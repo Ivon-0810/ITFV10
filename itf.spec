@@ -1,16 +1,17 @@
 # -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_submodules
 
-block_cipher = None
-
 hidden_imports = []
 hidden_imports += collect_submodules('reportlab')
+hidden_imports += collect_submodules('openpyxl')
+hidden_imports += collect_submodules('flask')
+hidden_imports += collect_submodules('webview')
 
 a = Analysis(
     ['app.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('templates', 'templates'), ('static', 'static')],
     hiddenimports=hidden_imports,
     hookspath=[],
     hooksconfig={},
@@ -18,10 +19,10 @@ a = Analysis(
     excludes=[],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
-    cipher=block_cipher,
+    cipher=None,
     noarchive=False,
 )
-pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+pyz = PYZ(a.pure, a.zipped_data, cipher=None)
 
 exe = EXE(
     pyz,
