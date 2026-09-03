@@ -1,36 +1,38 @@
 # -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_submodules
 
-hidden_imports = []
-hidden_imports += collect_submodules('reportlab')
-hidden_imports += collect_submodules('openpyxl')
-hidden_imports += collect_submodules('flask')
-hidden_imports += collect_submodules('webview')
+block_cipher = None
 
 a = Analysis(
-    ['app.py'],
+    ['desktop_launcher.py'],
     pathex=[],
     binaries=[],
-    datas=[('templates', 'templates'), ('static', 'static')],
-    hiddenimports=hidden_imports,
+    datas=[
+        ('Modèles', 'Modèles'),
+        ('Statique', 'Statique')
+    ],
+    hiddenimports=collect_submodules('reportlab'),
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
-    cipher=None,
+    cipher=block_cipher,
     noarchive=False,
 )
-pyz = PYZ(a.pure, a.zipped_data, cipher=None)
+
+pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(
     pyz,
     a.scripts,
     a.binaries,
+    a.zipfiles,
     a.datas,
     [],
     name='IrwaneTraceForest',
+    icon='logo.ico',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -43,5 +45,4 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='logo.ico',
 )
